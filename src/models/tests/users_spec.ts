@@ -2,7 +2,7 @@ import { user, usersStore } from "../users";
 
 const store = new usersStore()
 
-describe('Region Model', ()=> {
+describe('User Model', ()=> {
     it('should have index method', ()=> {
         expect(store.index).toBeDefined
     })
@@ -19,7 +19,7 @@ describe('Region Model', ()=> {
         expect(store.delete).toBeDefined
     })
 
-    it('Should Create new Category', async ()=> {
+    it('Should Create new User', async ()=> {
         const result = await store.create({
             name : 'Mamdouh',
             email : 'shell_512@ymail.com'

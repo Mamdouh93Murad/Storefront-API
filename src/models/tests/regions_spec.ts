@@ -19,7 +19,7 @@ describe('Region Model', ()=> {
         expect(store.delete).toBeDefined
     })
 
-    it('Should Create new Category', async ()=> {
+    it('Should Create new Region', async ()=> {
         const result = await store.create({
             name : 'Africa'
         })

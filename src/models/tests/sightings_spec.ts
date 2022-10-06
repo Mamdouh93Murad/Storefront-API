@@ -2,7 +2,7 @@ import { sighting, sightingsStore } from "../sightings";
 
 const store = new sightingsStore()
 
-describe('Region Model', ()=> {
+describe('Sighting Model', ()=> {
     it('should have index method', ()=> {
         expect(store.index).toBeDefined
     })
@@ -19,7 +19,7 @@ describe('Region Model', ()=> {
         expect(store.delete).toBeDefined
     })
 
-    it('Should Create new Category', async ()=> {
+    it('Should Create new Sighting', async ()=> {
         const result = await store.create({
             name : 'Lion',
             description : 'King of Jungle',
