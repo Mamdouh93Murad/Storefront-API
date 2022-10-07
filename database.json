@@ -10,7 +10,7 @@
       "driver": "pg",
       "host": "127.0.0.1",
       "database": "sightings_test",
-      "user": "postgres_user",
+      "user": "postgres",
       "password": "meow"
     }
   }
