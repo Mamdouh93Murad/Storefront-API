@@ -7,7 +7,8 @@ export interface sighting {
     description : string,
     number : number,
     user_id : number,
-    region_id : number
+    region_id : number,
+    category_id : number
 }
 
 export class sightingsStore {
@@ -18,7 +19,7 @@ export class sightingsStore {
             const sql = 'SELECT * FROM sightings'
             const result = await conn.query(sql)
             conn.release()
-            return result.rows[0]
+            return result.rows
         }
         catch(err){
             throw new Error(`Could not retrieve database rows. Error ${err}`)
@@ -40,13 +41,13 @@ export class sightingsStore {
         }
     }
 
-    async create(s : sighting) : Promise<sighting>{
+    async create(s : sighting, u : string, r : string, c : string) : Promise<sighting>{
         try{
             // @ts-ignore
             const conn = await client.connect()
-            // const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=$(4)), (SELECT id FROM regions WHERE name=($5)))'
-            const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, $4,$5)'
-            const result = await conn.query(sql, [s.name, s.description, s.number, s.user_id, s.region_id])
+            // const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=$(4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6)))'
+            const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id, category_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=($4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6))) RETURNING *'
+            const result = await conn.query(sql, [s.name, s.description, s.number,  u, r, c])
             conn.release()
             return result.rows[0]
         }
@@ -58,8 +59,8 @@ export class sightingsStore {
         try{
             // @ts-ignore
             const conn = await client.connect()
-            const sql = 'UPDATE sightings SET (name, description, number, user_id, region_id) = ($2, $3, $4, $5, $6) WHERE id=($1)'
-            const result = await conn.query(sql, [id, s.name, s.description, s.number, s.user_id, s.region_id])
+            const sql = 'UPDATE sightings SET (name, description, number) = ($2, $3, $4) WHERE id=($1) RETURNING *'
+            const result = await conn.query(sql, [id, s.name, s.description, s.number])
             conn.release()
             return result.rows[0]
         }

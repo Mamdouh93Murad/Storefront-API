@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const sightings_1 = require("../sightings");
 const store = new sightings_1.sightingsStore();
-describe('Region Model', () => {
+describe('Sighting Model', () => {
     it('should have index method', () => {
         expect(store.index).toBeDefined;
     });
@@ -18,21 +18,23 @@ describe('Region Model', () => {
     it('should have delete method', () => {
         expect(store.delete).toBeDefined;
     });
-    it('Should Create new Category', async () => {
+    it('Should Create new Sighting', async () => {
         const result = await store.create({
             name: 'Lion',
             description: 'King of Jungle',
             number: 2,
-            user_id: 1,
-            region_id: 1
-        });
+            user_id: 0,
+            region_id: 0,
+            category_id: 0
+        }, 'Sherry', 'Europe', 'Animal');
         expect(result).toEqual({
             id: 1,
             name: 'Lion',
             description: 'King of Jungle',
             number: 2,
-            user_id: 1,
-            region_id: 1
+            user_id: 2,
+            region_id: 2,
+            category_id: 2
         });
     });
     it('Should Retrieve all table entries', async () => {
@@ -42,8 +44,9 @@ describe('Region Model', () => {
                 name: 'Lion',
                 description: 'King of Jungle',
                 number: 2,
-                user_id: 1,
-                region_id: 1
+                user_id: 2,
+                region_id: 2,
+                category_id: 2
             }]);
     });
     it('Should Retrieve entry with given index', async () => {
@@ -53,8 +56,9 @@ describe('Region Model', () => {
             name: 'Lion',
             description: 'King of Jungle',
             number: 2,
-            user_id: 1,
-            region_id: 1
+            user_id: 2,
+            region_id: 2,
+            category_id: 2
         });
     });
     it('Should update Entry', async () => {
@@ -62,8 +66,9 @@ describe('Region Model', () => {
             name: 'Tiger',
             description: 'King of Forest',
             number: 4,
-            user_id: 2,
-            region_id: 4
+            user_id: 0,
+            region_id: 0,
+            category_id: 0
         });
         expect(result).toEqual({
             id: 1,
@@ -71,7 +76,8 @@ describe('Region Model', () => {
             description: 'King of Forest',
             number: 4,
             user_id: 2,
-            region_id: 4
+            region_id: 2,
+            category_id: 2
         });
     });
     it('Should Delete Entry', async () => {

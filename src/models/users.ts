@@ -16,7 +16,7 @@ export class usersStore {
             const sql = 'SELECT * FROM users'
             const result = await conn.query(sql)
             conn.release()
-            return result.rows[0]
+            return result.rows
         }
         catch(err){
             throw new Error(`Could not retrieve database rows. Error ${err}`)
@@ -42,7 +42,7 @@ export class usersStore {
         try{
             // @ts-ignore
             const conn = await client.connect()
-            const sql = 'INSERT INTO users (name, email) VALUES ($1, $2)'
+            const sql = 'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *'
             const result = await conn.query(sql, [u.name, u.email])
             conn.release()
             return result.rows[0]
@@ -56,7 +56,7 @@ export class usersStore {
         try{
             // @ts-ignore
             const conn = await client.connect()
-            const sql = 'UPDATE users SET (name, email) = ($2, $3) WHERE id=($1)'
+            const sql = 'UPDATE users SET (name, email) = ($2, $3) WHERE id=($1) RETURNING *'
             const result = await conn.query(sql, [id, u.name, u.email])
             conn.release()
             return result.rows[0]

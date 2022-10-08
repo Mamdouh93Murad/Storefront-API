@@ -20,37 +20,46 @@ describe('Category Model', () => {
     });
     it('Should Create new Category', async () => {
         const result = await store.create({
-            name: 'plant'
+            name: 'Plant'
+        });
+        const result2 = await store.create({
+            name: 'Animal'
         });
         expect(result).toEqual({
             id: 1,
-            name: 'plant'
+            name: 'Plant'
         });
     });
     it('Should Retrieve all table entries', async () => {
         const result = await store.index();
         expect(result).toEqual([{
                 id: 1,
-                name: 'plant'
+                name: 'Plant'
+            }, {
+                id: 2,
+                name: 'Animal'
             }]);
     });
     it('Should Retrieve entry with given index', async () => {
         const result = await store.show(1);
         expect(result).toEqual({
             id: 1,
-            name: 'plant'
+            name: 'Plant'
         });
     });
     it('Should update Entry', async () => {
-        const result = await store.update(1, { name: 'animal' });
+        const result = await store.update(1, { name: 'Bird' });
         expect(result).toEqual({
             id: 1,
-            name: 'animal'
+            name: 'Bird'
         });
     });
     it('Should Delete Entry', async () => {
         await store.delete(1);
         const result = await store.index();
-        expect(result).toEqual([]);
+        expect(result).toEqual([{
+                id: 2,
+                name: 'Animal'
+            }]);
     });
 });

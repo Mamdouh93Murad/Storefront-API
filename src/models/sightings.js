@@ -14,7 +14,7 @@ class sightingsStore {
             const sql = 'SELECT * FROM sightings';
             const result = await conn.query(sql);
             conn.release();
-            return result.rows[0];
+            return result.rows;
         }
         catch (err) {
             throw new Error(`Could not retrieve database rows. Error ${err}`);
@@ -33,13 +33,13 @@ class sightingsStore {
             throw new Error(`Could not show sighting ${id}. Error ${err}`);
         }
     }
-    async create(s) {
+    async create(s, u, r, c) {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            // const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=$(4)), (SELECT id FROM regions WHERE name=($5)))'
-            const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, $4,$5)';
-            const result = await conn.query(sql, [s.name, s.description, s.number, s.user_id, s.region_id]);
+            // const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=$(4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6)))'
+            const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id, category_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=($4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6))) RETURNING *';
+            const result = await conn.query(sql, [s.name, s.description, s.number, u, r, c]);
             conn.release();
             return result.rows[0];
         }
@@ -51,8 +51,8 @@ class sightingsStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'UPDATE sightings SET (name, description, number, user_id, region_id) = ($2, $3, $4, $5, $6) WHERE id=($1)';
-            const result = await conn.query(sql, [id, s.name, s.description, s.number, s.user_id, s.region_id]);
+            const sql = 'UPDATE sightings SET (name, description, number) = ($2, $3, $4) WHERE id=($1) RETURNING *';
+            const result = await conn.query(sql, [id, s.name, s.description, s.number]);
             conn.release();
             return result.rows[0];
         }

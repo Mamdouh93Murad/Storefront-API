@@ -18,9 +18,12 @@ describe('Region Model', () => {
     it('should have delete method', () => {
         expect(store.delete).toBeDefined;
     });
-    it('Should Create new Category', async () => {
+    it('Should Create new Region', async () => {
         const result = await store.create({
             name: 'Africa'
+        });
+        const result2 = await store.create({
+            name: 'Europe'
         });
         expect(result).toEqual({
             id: 1,
@@ -32,6 +35,9 @@ describe('Region Model', () => {
         expect(result).toEqual([{
                 id: 1,
                 name: 'Africa'
+            }, {
+                id: 2,
+                name: 'Europe'
             }]);
     });
     it('Should Retrieve entry with given index', async () => {
@@ -51,6 +57,9 @@ describe('Region Model', () => {
     it('Should Delete Entry', async () => {
         await store.delete(1);
         const result = await store.index();
-        expect(result).toEqual([]);
+        expect(result).toEqual([{
+                id: 2,
+                name: 'Europe'
+            }]);
     });
 });

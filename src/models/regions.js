@@ -14,7 +14,7 @@ class regionsStore {
             const sql = 'SELECT * FROM regions';
             const result = await conn.query(sql);
             conn.release();
-            return result.rows[0];
+            return result.rows;
         }
         catch (err) {
             throw new Error(`Could not retrieve database rows. Error ${err}`);
@@ -37,7 +37,7 @@ class regionsStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'INSERT INTO regions (name) VALUES ($1)';
+            const sql = 'INSERT INTO regions (name) VALUES ($1) RETURNING *';
             const result = await conn.query(sql, [r.name]);
             conn.release();
             return result.rows[0];
@@ -50,7 +50,7 @@ class regionsStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'UPDATE regions SET name=($2) WHERE id=($1)';
+            const sql = 'UPDATE regions SET name=($2) WHERE id=($1) RETURNING *';
             const result = await conn.query(sql, [id, r.name]);
             conn.release();
             return result.rows[0];

@@ -40,7 +40,7 @@ export class categoryStore {
         try{
             // @ts-ignore
             const conn = await client.connect()
-            const sql = 'INSERT INTO categories (name) VALUES ($1)'
+            const sql = 'INSERT INTO categories (name) VALUES ($1) RETURNING *'
             const result = await conn.query(sql, [c.name])
             return result.rows[0]
         }
@@ -53,7 +53,7 @@ export class categoryStore {
         try{
             // @ts-ignore
             const conn = await client.connect()
-            const sql = 'UPDATE categories SET name=($2) WHERE id=($1)'
+            const sql = 'UPDATE categories SET name=($2) WHERE id=($1) RETURNING *'
             const result = await conn.query(sql, [id, c.name])
             return result.rows[0]
         }

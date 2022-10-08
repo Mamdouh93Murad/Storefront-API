@@ -22,12 +22,16 @@ describe('User Model', ()=> {
     it('Should Create new User', async ()=> {
         const result = await store.create({
             name : 'Mamdouh',
-            email : 'shell_512@ymail.com'
+            email : 'mamdouh93morad@gmail.com'
+        })
+        const result2 = await store.create({
+            name : 'Sanji',
+            email : 'sanji12morad@gmail.com'
         })
         expect(result).toEqual({
             id : 1,
             name : 'Mamdouh',
-            email : 'shell_512@ymail.com'
+            email : 'mamdouh93morad@gmail.com'
         })
     })
     it('Should Retrieve all table entries', async ()=> {
@@ -35,7 +39,11 @@ describe('User Model', ()=> {
         expect(result).toEqual([{
             id: 1,
             name : 'Mamdouh',
-            email : 'shell_512@ymail.com'
+            email : 'mamdouh93morad@gmail.com'
+        }, {
+            id : 2,
+            name : 'Sanji',
+            email : 'sanji12morad@gmail.com'
         }])
     })
     it('Should Retrieve entry with given index', async ()=> {
@@ -43,21 +51,25 @@ describe('User Model', ()=> {
         expect(result).toEqual({
             id : 1,
             name : 'Mamdouh',
-            email : 'shell_512@ymail.com'
+            email : 'mamdouh93morad@gmail.com'
         })
     })
     it('Should update Entry', async ()=> {
-        const result = await store.update(1, {name:'Sanji', email:'darkciandra@gmail.com'})
+        const result = await store.update(2, {name:'Sherry', email:'sherry12morad@gmail.com'})
         expect(result).toEqual({
-            id : 1,
-            name : 'Sanji',
-            email : 'darkciandra@gmail.com'
+            id : 2,
+            name : 'Sherry',
+            email : 'sherry12morad@gmail.com'
         })
     })
     it('Should Delete Entry', async ()=> {
         await store.delete(1)
         const result = await store.index()
-        expect(result).toEqual([])
+        expect(result).toEqual([{
+            id : 2,
+            name : 'Sherry',
+            email : 'sherry12morad@gmail.com'
+        }])
         
     })
 })

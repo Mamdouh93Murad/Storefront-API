@@ -23,6 +23,9 @@ describe('Region Model', ()=> {
         const result = await store.create({
             name : 'Africa'
         })
+        const result2 = await store.create({
+            name : 'Europe'
+        })
         expect(result).toEqual({
             id : 1,
             name : 'Africa'
@@ -33,6 +36,9 @@ describe('Region Model', ()=> {
         expect(result).toEqual([{
             id: 1,
             name: 'Africa'
+        }, {
+            id : 2,
+            name : 'Europe'
         }])
     })
     it('Should Retrieve entry with given index', async ()=> {
@@ -52,7 +58,10 @@ describe('Region Model', ()=> {
     it('Should Delete Entry', async ()=> {
         await store.delete(1)
         const result = await store.index()
-        expect(result).toEqual([])
+        expect(result).toEqual([{
+            id : 2,
+            name : 'Europe'
+        }])
         
     })
 })
