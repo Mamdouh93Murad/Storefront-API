@@ -1,8 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const categories_1 = require("../categories");
-const store = new categories_1.categoryStore();
-describe('Category Model', () => {
+/* eslint-disable no-unused-expressions */
+/* eslint-disable new-cap */
+/* eslint-disable jasmine/expect-matcher */
+// eslint-disable-next-line no-unused-vars
+const regions_1 = require("../regions");
+const store = new regions_1.regionsStore();
+describe('Region Model', () => {
     it('should have index method', () => {
         expect(store.index).toBeDefined;
     });
@@ -18,48 +22,54 @@ describe('Category Model', () => {
     it('should have delete method', () => {
         expect(store.delete).toBeDefined;
     });
-    it('Should Create new Category', async () => {
+    it('Should Create new Region', async () => {
         const result = await store.create({
-            name: 'Plant'
+            name: 'Africa'
         });
+        // eslint-disable-next-line no-unused-vars
         const result2 = await store.create({
-            name: 'Animal'
+            name: 'Europe'
         });
         expect(result).toEqual({
             id: 1,
-            name: 'Plant'
+            name: 'Africa'
         });
     });
     it('Should Retrieve all table entries', async () => {
         const result = await store.index();
-        expect(result).toEqual([{
+        expect(result).toEqual([
+            {
                 id: 1,
-                name: 'Plant'
-            }, {
+                name: 'Africa'
+            },
+            {
                 id: 2,
-                name: 'Animal'
-            }]);
+                name: 'Europe'
+            }
+        ]);
     });
     it('Should Retrieve entry with given index', async () => {
         const result = await store.show(1);
         expect(result).toEqual({
             id: 1,
-            name: 'Plant'
+            name: 'Africa'
         });
     });
     it('Should update Entry', async () => {
-        const result = await store.update(1, { name: 'Bird' });
+        const result = await store.update(1, { name: 'Asia' });
         expect(result).toEqual({
             id: 1,
-            name: 'Bird'
+            name: 'Asia'
         });
     });
     it('Should Delete Entry', async () => {
         await store.delete(1);
         const result = await store.index();
-        expect(result).toEqual([{
+        expect(result).toEqual([
+            {
                 id: 2,
-                name: 'Animal'
-            }]);
+                name: 'Europe'
+            }
+        ]);
     });
 });

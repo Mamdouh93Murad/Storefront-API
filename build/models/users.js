@@ -23,6 +23,7 @@ class usersStore {
     async show(id) {
         try {
             // @ts-ignore
+            console.log(id);
             const conn = await database_1.default.connect();
             const sql = 'SELECT * FROM users where id=($1)';
             const result = await conn.query(sql, [id]);

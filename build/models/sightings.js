@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sightingsStore = void 0;
+/* eslint-disable camelcase */
 // @ts-ignore
 const database_1 = __importDefault(require("../database"));
 class sightingsStore {
@@ -39,7 +40,14 @@ class sightingsStore {
             const conn = await database_1.default.connect();
             // const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=$(4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6)))'
             const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id, category_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=($4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6))) RETURNING *';
-            const result = await conn.query(sql, [s.name, s.description, s.number, u, r, c]);
+            const result = await conn.query(sql, [
+                s.name,
+                s.description,
+                s.number,
+                u,
+                r,
+                c
+            ]);
             conn.release();
             return result.rows[0];
         }
@@ -52,7 +60,12 @@ class sightingsStore {
             // @ts-ignore
             const conn = await database_1.default.connect();
             const sql = 'UPDATE sightings SET (name, description, number) = ($2, $3, $4) WHERE id=($1) RETURNING *';
-            const result = await conn.query(sql, [id, s.name, s.description, s.number]);
+            const result = await conn.query(sql, [
+                id,
+                s.name,
+                s.description,
+                s.number
+            ]);
             conn.release();
             return result.rows[0];
         }

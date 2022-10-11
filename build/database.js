@@ -13,7 +13,7 @@ if (ENV === 'dev') {
         host: POSTGRES_HOST,
         database: POSTGRES_DB,
         user: POSTGRES_USER,
-        password: POSTGRES_PASSWORD,
+        password: POSTGRES_PASSWORD
     });
 }
 if (ENV === 'test') {
@@ -21,7 +21,7 @@ if (ENV === 'test') {
         host: POSTGRES_HOST,
         database: POSTGRES_DB_TEST,
         user: POSTGRES_USER,
-        password: POSTGRES_PASSWORD,
+        password: POSTGRES_PASSWORD
     });
 }
 exports.default = client;

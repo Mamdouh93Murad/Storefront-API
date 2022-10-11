@@ -1,5 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-unused-expressions */
+/* eslint-disable new-cap */
+/* eslint-disable jasmine/expect-matcher */
+// eslint-disable-next-line no-unused-vars
 const sightings_1 = require("../sightings");
 const store = new sightings_1.sightingsStore();
 describe('Sighting Model', () => {
@@ -27,6 +31,7 @@ describe('Sighting Model', () => {
             region_id: 0,
             category_id: 0
         }, 'Sherry', 'Europe', 'Animal');
+        console.log(result);
         expect(result).toEqual({
             id: 1,
             name: 'Lion',
@@ -39,7 +44,8 @@ describe('Sighting Model', () => {
     });
     it('Should Retrieve all table entries', async () => {
         const result = await store.index();
-        expect(result).toEqual([{
+        expect(result).toEqual([
+            {
                 id: 1,
                 name: 'Lion',
                 description: 'King of Jungle',
@@ -47,7 +53,8 @@ describe('Sighting Model', () => {
                 user_id: 2,
                 region_id: 2,
                 category_id: 2
-            }]);
+            }
+        ]);
     });
     it('Should Retrieve entry with given index', async () => {
         const result = await store.show(1);
