@@ -57,7 +57,7 @@ const authenticate = async (req : Request, res : Response) => {
       password: req.body.password
     }
 
-    const newUser = await store.authenticate(user.name, user.password)
+    const newUser = await store.authenticate(req.params.name, user.password)
     res.json(newUser)
   } catch (err) {
     res.status(400)
@@ -71,7 +71,7 @@ const userRoutes = (app: express.Application) => {
   app.post('/users', logger, create)
   app.put('/users/:id', logger, update)
   app.delete('/users/:id', logger, destroy)
-  app.post('/users/authenticate', logger, authenticate)
+  app.post('/users/authenticate/:name', logger, authenticate)
 }
 
 export default userRoutes

@@ -106,7 +106,9 @@ export class usersStore {
       console.log(user)
 
       if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password)) {
-        return user
+        const sql = 'SELECT id, name, email FROM users where name=($1)'
+        const newUser = await conn.query(sql, [username])
+        return newUser.rows[0]
       }
     }
 
