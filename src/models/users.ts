@@ -1,12 +1,17 @@
 // @ts-ignore
 import client from '../database'
-
+import bcrypt from 'bcrypt'
 export interface user {
   id?: number
   name: string
-  email: string
+  email: string,
+  password : string
 }
 
+const {
+  BCRYPT_PASSWORD,
+  SALT_ROUNDS
+} = process.env
 export class usersStore {
   async index (): Promise<user[]> {
     try {
@@ -38,8 +43,14 @@ export class usersStore {
     try {
       // @ts-ignore
       const conn = await client.connect()
-      const sql = 'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *'
-      const result = await conn.query(sql, [u.name, u.email])
+      const sql = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *'
+
+      const hash = bcrypt.hashSync(
+        u.password + BCRYPT_PASSWORD,
+        Number(SALT_ROUNDS)
+      )
+
+      const result = await conn.query(sql, [u.name, u.email, hash])
       conn.release()
       return result.rows[0]
     } catch (err) {
@@ -52,8 +63,14 @@ export class usersStore {
       // @ts-ignore
       const conn = await client.connect()
       const sql =
-        'UPDATE users SET (name, email) = ($2, $3) WHERE id=($1) RETURNING *'
-      const result = await conn.query(sql, [id, u.name, u.email])
+        'UPDATE users SET (name, email, password) = ($2, $3, $4) WHERE id=($1) RETURNING *'
+
+      const hash = bcrypt.hashSync(
+        u.password + BCRYPT_PASSWORD,
+        Number(SALT_ROUNDS)
+      )
+
+      const result = await conn.query(sql, [id, u.name, u.email, hash])
       conn.release()
       return result.rows[0]
     } catch (err) {
@@ -72,5 +89,27 @@ export class usersStore {
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error ${err}`)
     }
+  }
+
+  async authenticate (username: string, password: string): Promise<user | null> {
+    // @ts-ignore
+    const conn = await client.connect()
+    const sql = 'SELECT password FROM users WHERE username=($1)'
+
+    const result = await conn.query(sql, [username])
+
+    console.log(password + BCRYPT_PASSWORD)
+
+    if (result.rows.length) {
+      const user = result.rows[0]
+
+      console.log(user)
+
+      if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password)) {
+        return user
+      }
+    }
+
+    return null
   }
 }

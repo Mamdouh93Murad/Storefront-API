@@ -18,7 +18,8 @@ const create = async (req: Request, res: Response) => {
   try {
     const user: user = {
       name: req.body.name,
-      email: req.body.email
+      email: req.body.email,
+      password: req.body.password
     }
     const newUser = await store.create(user)
     res.json(newUser)
@@ -32,7 +33,8 @@ const update = async (req : Request, res : Response) => {
   try {
     const user: user = {
       name: req.body.name,
-      email: req.body.email
+      email: req.body.email,
+      password: req.body.password
     }
     const newUser = await store.update(Number(req.params.id), user)
     res.json(newUser)
@@ -47,12 +49,29 @@ const destroy = async (req: Request, res: Response) => {
   res.json(deleted)
 }
 
+const authenticate = async (req : Request, res : Response) => {
+  try {
+    const user : user = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password
+    }
+
+    const newUser = await store.authenticate(user.name, user.password)
+    res.json(newUser)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
+}
+
 const userRoutes = (app: express.Application) => {
   app.get('/users', logger, index)
   app.get('/users/:id', logger, show)
   app.post('/users', logger, create)
   app.put('/users/:id', logger, update)
   app.delete('/users/:id', logger, destroy)
+  app.post('/users/authenticate', logger, authenticate)
 }
 
 export default userRoutes

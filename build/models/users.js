@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersStore = void 0;
 // @ts-ignore
 const database_1 = __importDefault(require("../database"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 class usersStore {
     async index() {
         try {
@@ -23,7 +25,6 @@ class usersStore {
     async show(id) {
         try {
             // @ts-ignore
-            console.log(id);
             const conn = await database_1.default.connect();
             const sql = 'SELECT * FROM users where id=($1)';
             const result = await conn.query(sql, [id]);
@@ -38,8 +39,9 @@ class usersStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *';
-            const result = await conn.query(sql, [u.name, u.email]);
+            const sql = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *';
+            const hash = bcrypt_1.default.hashSync(u.password + BCRYPT_PASSWORD, Number(SALT_ROUNDS));
+            const result = await conn.query(sql, [u.name, u.email, hash]);
             conn.release();
             return result.rows[0];
         }
@@ -51,8 +53,9 @@ class usersStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'UPDATE users SET (name, email) = ($2, $3) WHERE id=($1) RETURNING *';
-            const result = await conn.query(sql, [id, u.name, u.email]);
+            const sql = 'UPDATE users SET (name, email, password) = ($2, $3, $4) WHERE id=($1) RETURNING *';
+            const hash = bcrypt_1.default.hashSync(u.password + BCRYPT_PASSWORD, Number(SALT_ROUNDS));
+            const result = await conn.query(sql, [id, u.name, u.email, hash]);
             conn.release();
             return result.rows[0];
         }
@@ -72,6 +75,21 @@ class usersStore {
         catch (err) {
             throw new Error(`Could not delete user ${id}. Error ${err}`);
         }
+    }
+    async authenticate(username, password) {
+        // @ts-ignore
+        const conn = await database_1.default.connect();
+        const sql = 'SELECT password FROM users WHERE username=($1)';
+        const result = await conn.query(sql, [username]);
+        console.log(password + BCRYPT_PASSWORD);
+        if (result.rows.length) {
+            const user = result.rows[0];
+            console.log(user);
+            if (bcrypt_1.default.compareSync(password + BCRYPT_PASSWORD, user.password)) {
+                return user;
+            }
+        }
+        return null;
     }
 }
 exports.usersStore = usersStore;

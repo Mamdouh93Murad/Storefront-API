@@ -18,7 +18,8 @@ const create = async (req, res) => {
     try {
         const user = {
             name: req.body.name,
-            email: req.body.email
+            email: req.body.email,
+            password: req.body.password
         };
         const newUser = await store.create(user);
         res.json(newUser);
@@ -32,7 +33,8 @@ const update = async (req, res) => {
     try {
         const user = {
             name: req.body.name,
-            email: req.body.email
+            email: req.body.email,
+            password: req.body.password
         };
         const newUser = await store.update(Number(req.params.id), user);
         res.json(newUser);
@@ -46,11 +48,27 @@ const destroy = async (req, res) => {
     const deleted = await store.delete(Number(req.params.id));
     res.json(deleted);
 };
+const authenticate = async (req, res) => {
+    try {
+        const user = {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+        };
+        const newUser = await store.authenticate(user.name, user.password);
+        res.json(newUser);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
+};
 const userRoutes = (app) => {
     app.get('/users', logger_1.default, index);
     app.get('/users/:id', logger_1.default, show);
     app.post('/users', logger_1.default, create);
     app.put('/users/:id', logger_1.default, update);
     app.delete('/users/:id', logger_1.default, destroy);
+    app.post('/users/authenticate', logger_1.default, authenticate);
 };
 exports.default = userRoutes;
