@@ -1,8 +1,22 @@
 /* eslint-disable new-cap */
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { user, usersStore } from '../models/users'
 import logger from '../utilities/logger'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 const store = new usersStore()
+
+const verifyAuthToken = (req: Request, res: Response, next : NextFunction) => {
+  try {
+    const authorizationHeader = req.headers.authorization as string
+    const token = authorizationHeader.split(' ')[1]
+    // eslint-disable-next-line no-unused-vars
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string)
+
+    next()
+  } catch (error) {
+    res.status(401)
+  }
+}
 
 const index = async (_req: Request, res: Response) => {
   const user = await store.index()
@@ -22,7 +36,8 @@ const create = async (req: Request, res: Response) => {
       password: req.body.password
     }
     const newUser = await store.create(user)
-    res.json(newUser)
+    const token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as string)
+    res.json(token)
   } catch (err) {
     res.status(400)
     res.json(err)
@@ -35,6 +50,18 @@ const update = async (req : Request, res : Response) => {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password
+    }
+    try {
+      const authorizationHeader = req.headers.authorization as string
+      const token = authorizationHeader.split(' ')[1]
+      const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload
+      if (decoded.id !== user.id) {
+        throw new Error('User id does not match!')
+      }
+    } catch (err) {
+      res.status(401)
+      res.json(err)
+      return
     }
     const newUser = await store.update(Number(req.params.id), user)
     res.json(newUser)
@@ -58,9 +85,10 @@ const authenticate = async (req : Request, res : Response) => {
     }
 
     const newUser = await store.authenticate(req.params.name, user.password)
-    res.json(newUser)
+    const token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as string)
+    res.json(token)
   } catch (err) {
-    res.status(400)
+    res.status(401)
     res.json(err)
   }
 }
@@ -69,8 +97,8 @@ const userRoutes = (app: express.Application) => {
   app.get('/users', logger, index)
   app.get('/users/:id', logger, show)
   app.post('/users', logger, create)
-  app.put('/users/:id', logger, update)
-  app.delete('/users/:id', logger, destroy)
+  app.put('/users/:id', [logger, verifyAuthToken], update)
+  app.delete('/users/:id', [logger, verifyAuthToken], destroy)
   app.post('/users/authenticate/:name', logger, authenticate)
 }
 
