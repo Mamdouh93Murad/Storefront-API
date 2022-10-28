@@ -1,10 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import categoryRoutes from './handlers/category'
 import userRoutes from './handlers/user'
-import regionRoutes from './handlers/region'
-import sightingRoutes from './handlers/sighting'
+import productRoutes from './handlers/product'
+import orderRoutes from './handlers/order'
 
 const app: express.Application = express()
 const address: string = '0.0.0.0:3000'
@@ -18,13 +17,12 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 
 app.get('/', function (req : express.Request, res : express.Response) {
-  res.send('MEOW!')
+  res.send('Welcome to Our Store!')
 })
 
-categoryRoutes(app)
-regionRoutes(app)
+productRoutes(app)
 userRoutes(app)
-sightingRoutes(app)
+orderRoutes(app)
 
 app.listen(3000, function () {
   console.log(`starting app on: ${address}`)

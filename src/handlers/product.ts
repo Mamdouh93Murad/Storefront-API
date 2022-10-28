@@ -1,9 +1,9 @@
 /* eslint-disable new-cap */
 import express, { NextFunction, Request, Response } from 'express'
-import { region, regionsStore } from '../models/regions'
+import { product, productsStore } from '../models/products'
 import logger from '../utilities/logger'
 import jwt from 'jsonwebtoken'
-const store = new regionsStore()
+const store = new productsStore()
 // @ts-ignore
 const verifyAuthToken = (req: Request, res: Response, next :NextFunction) => {
   try {
@@ -19,22 +19,24 @@ const verifyAuthToken = (req: Request, res: Response, next :NextFunction) => {
 }
 
 const index = async (_req: Request, res: Response) => {
-  const region = await store.index()
-  res.json(region)
+  const product = await store.index()
+  res.json(product)
 }
 
 const show = async (req: Request, res: Response) => {
-  const region = await store.show(Number(req.params.id))
-  res.json(region)
+  const product = await store.show(Number(req.params.id))
+  res.json(product)
 }
 
 const create = async (req: Request, res: Response) => {
   try {
-    const region: region = {
-      name: req.body.name
+    const product: product = {
+      name: req.body.name,
+      price: req.body.price,
+      category: req.body.category
     }
-    const newRegion = await store.create(region)
-    res.json(newRegion)
+    const newProduct = await store.create(product)
+    res.json(newProduct)
   } catch (err) {
     res.status(400)
     res.json(err)
@@ -43,11 +45,13 @@ const create = async (req: Request, res: Response) => {
 
 const update = async (req : Request, res : Response) => {
   try {
-    const region: region = {
-      name: req.body.name
+    const product: product = {
+      name: req.body.name,
+      price: req.body.price,
+      category: req.body.category
     }
-    const newRegion = await store.update(Number(req.params.id), region)
-    res.json(newRegion)
+    const newProduct = await store.update(Number(req.params.id), product)
+    res.json(newProduct)
   } catch (err) {
     res.status(400)
     res.json(err)
@@ -59,12 +63,12 @@ const destroy = async (req: Request, res: Response) => {
   res.json(deleted)
 }
 
-const regionRoutes = (app: express.Application) => {
-  app.get('/regions', logger, index)
-  app.get('/regions/:id', logger, show)
-  app.post('/regions', [logger, verifyAuthToken], create)
-  app.put('/regions/:id', [logger, verifyAuthToken], update)
-  app.delete('/regions/:id', [logger, verifyAuthToken], destroy)
+const productRoutes = (app: express.Application) => {
+  app.get('/products', logger, index)
+  app.get('/products/:id', logger, show)
+  app.post('/products', [logger, verifyAuthToken], create)
+  app.put('/products/:id', [logger, verifyAuthToken], update)
+  app.delete('/products/:id', [logger, verifyAuthToken], destroy)
 }
 
-export default regionRoutes
+export default productRoutes

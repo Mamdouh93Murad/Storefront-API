@@ -39,9 +39,9 @@ class usersStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *';
+            const sql = 'INSERT INTO users (firstname, lastname, password) VALUES ($1, $2, $3) RETURNING *';
             const hash = bcrypt_1.default.hashSync(u.password + BCRYPT_PASSWORD, Number(SALT_ROUNDS));
-            const result = await conn.query(sql, [u.name, u.email, hash]);
+            const result = await conn.query(sql, [u.firstname, u.lastname, hash]);
             conn.release();
             return result.rows[0];
         }
@@ -53,9 +53,9 @@ class usersStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const sql = 'UPDATE users SET (name, email, password) = ($2, $3, $4) WHERE id=($1) RETURNING *';
+            const sql = 'UPDATE users SET (firstname, lastname, password) = ($2, $3, $4) WHERE id=($1) RETURNING *';
             const hash = bcrypt_1.default.hashSync(u.password + BCRYPT_PASSWORD, Number(SALT_ROUNDS));
-            const result = await conn.query(sql, [id, u.name, u.email, hash]);
+            const result = await conn.query(sql, [id, u.firstname, u.lastname, hash]);
             conn.release();
             return result.rows[0];
         }
@@ -79,14 +79,16 @@ class usersStore {
     async authenticate(username, password) {
         // @ts-ignore
         const conn = await database_1.default.connect();
-        const sql = 'SELECT password FROM users WHERE username=($1)';
+        const sql = 'SELECT password FROM users WHERE firstname=($1)';
         const result = await conn.query(sql, [username]);
         console.log(password + BCRYPT_PASSWORD);
         if (result.rows.length) {
             const user = result.rows[0];
             console.log(user);
             if (bcrypt_1.default.compareSync(password + BCRYPT_PASSWORD, user.password)) {
-                return user;
+                const sql = 'SELECT id, firstname, lastname FROM users where firstname=($1)';
+                const newUser = await conn.query(sql, [username]);
+                return newUser.rows[0];
             }
         }
         return null;

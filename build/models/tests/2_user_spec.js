@@ -24,50 +24,50 @@ describe('User Model', () => {
     });
     it('Should Create new User', async () => {
         const result = await store.create({
-            name: 'Mamdouh',
-            email: 'mamdouh93morad@gmail.com',
+            firstname: 'Mamdouh',
+            lastname: 'Morad',
             password: 'meow'
         });
         // eslint-disable-next-line no-unused-vars
         const result2 = await store.create({
-            name: 'Sanji',
-            email: 'sanji12morad@gmail.com',
+            firstname: 'Sanji',
+            lastname: 'Morad',
             password: 'meow'
         });
         expect(result.id).toBe(1);
-        expect(result.name).toBe('Mamdouh');
-        expect(result.email).toBe('mamdouh93morad@gmail.com');
+        expect(result.firstname).toBe('Mamdouh');
+        expect(result.lastname).toBe('Morad');
     });
     it('Should Retrieve all table entries', async () => {
         const result = await store.index();
         expect(result[0].id).toBe(1);
-        expect(result[0].name).toBe('Mamdouh');
-        expect(result[0].email).toBe('mamdouh93morad@gmail.com');
+        expect(result[0].firstname).toBe('Mamdouh');
+        expect(result[0].lastname).toBe('Morad');
         expect(result[1].id).toBe(2);
-        expect(result[1].name).toBe('Sanji');
-        expect(result[1].email).toBe('sanji12morad@gmail.com');
+        expect(result[1].firstname).toBe('Sanji');
+        expect(result[1].lastname).toBe('Morad');
     });
     it('Should Retrieve entry with given index', async () => {
         const result = await store.show(1);
         expect(result.id).toBe(1);
-        expect(result.name).toBe('Mamdouh');
-        expect(result.email).toBe('mamdouh93morad@gmail.com');
+        expect(result.firstname).toBe('Mamdouh');
+        expect(result.lastname).toBe('Morad');
     });
     it('Should update Entry', async () => {
         const result = await store.update(2, {
-            name: 'Sherry',
-            email: 'sherry12morad@gmail.com',
+            firstname: 'Sherry',
+            lastname: 'Morad',
             password: 'meow'
         });
         expect(result.id).toBe(2);
-        expect(result.name).toBe('Sherry');
-        expect(result.email).toBe('sherry12morad@gmail.com');
+        expect(result.firstname).toBe('Sherry');
+        expect(result.lastname).toBe('Morad');
     });
     it('Should Delete Entry', async () => {
-        await store.delete(1);
+        await store.delete(2);
         const result = await store.index();
-        expect(result[0].id).toBe(2);
-        expect(result[0].name).toBe('Sherry');
-        expect(result[0].email).toBe('sherry12morad@gmail.com');
+        expect(result[0].id).toBe(1);
+        expect(result[0].firstname).toBe('Mamdouh');
+        expect(result[0].lastname).toBe('Morad');
     });
 });

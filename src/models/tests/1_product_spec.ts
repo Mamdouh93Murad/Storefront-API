@@ -2,11 +2,11 @@
 /* eslint-disable new-cap */
 /* eslint-disable jasmine/expect-matcher */
 // eslint-disable-next-line no-unused-vars
-import { category, categoryStore } from '../categories'
+import { product, productsStore } from '../products'
 
-const store = new categoryStore()
+const store = new productsStore()
 
-describe('Category Model', () => {
+describe('Product Model', () => {
   it('should have index method', () => {
     expect(store.index).toBeDefined
   })
@@ -27,18 +27,24 @@ describe('Category Model', () => {
     expect(store.delete).toBeDefined
   })
 
-  it('Should Create new Category', async () => {
+  it('Should Create new Product', async () => {
     const result = await store.create({
-      name: 'Plant'
+      name: 'Book',
+      price: 5,
+      category: 'educational'
     })
     // eslint-disable-next-line no-unused-vars
     const result2 = await store.create({
-      name: 'Animal'
+      name: 'TV',
+      price: 50,
+      category: 'electronic'
     })
 
     expect(result).toEqual({
       id: 1,
-      name: 'Plant'
+      name: 'Book',
+      price: 5,
+      category: 'educational'
     })
   })
 
@@ -48,11 +54,15 @@ describe('Category Model', () => {
     expect(result).toEqual([
       {
         id: 1,
-        name: 'Plant'
+        name: 'Book',
+        price: 5,
+        category: 'educational'
       },
       {
         id: 2,
-        name: 'Animal'
+        name: 'TV',
+        price: 50,
+        category: 'electronic'
       }
     ])
   })
@@ -62,16 +72,20 @@ describe('Category Model', () => {
 
     expect(result).toEqual({
       id: 1,
-      name: 'Plant'
+      name: 'Book',
+      price: 5,
+      category: 'educational'
     })
   })
 
   it('Should update Entry', async () => {
-    const result = await store.update(1, { name: 'Bird' })
+    const result = await store.update(1, { name: 'Pen', price: 1, category: 'office' })
 
     expect(result).toEqual({
       id: 1,
-      name: 'Bird'
+      name: 'Pen',
+      price: 1,
+      category: 'office'
     })
   })
 
@@ -82,7 +96,9 @@ describe('Category Model', () => {
     expect(result).toEqual([
       {
         id: 2,
-        name: 'Animal'
+        name: 'TV',
+        price: 50,
+        category: 'electronic'
       }
     ])
   })

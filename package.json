@@ -8,11 +8,12 @@
     "build": "npx tsc",
     "jasmine": "jasmine",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./build --onSuccess \"node ./build/server.js\"",
-    "test": "set ENV=test&& npx tsc && db-migrate db:create sightings_test && db-migrate --env test up &&  jasmine && db-migrate db:drop sightings_test",
+    "test": "set ENV=test&& npx tsc && db-migrate db:create store_test && db-migrate --env test up &&  jasmine && db-migrate db:drop store_test",
     "tsc": "tsc",
     "lint": "eslint . --ext .ts ",
     "prettier-ts": "prettier --config .prettierrc.json \"src/**/*.ts\" --write",
-    "prettier-js": "prettier --config .prettierrc.json \"build/**/*.js\" --write"
+    "prettier-js": "prettier --config .prettierrc.json \"build/**/*.js\" --write",
+    "clean": "rimraf build"
   },
   "author": "Udacity",
   "license": "ISC",

@@ -31,8 +31,8 @@ const show = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   try {
     const user: user = {
-      name: req.body.name,
-      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       password: req.body.password
     }
     const newUser = await store.create(user)
@@ -47,8 +47,8 @@ const create = async (req: Request, res: Response) => {
 const update = async (req : Request, res : Response) => {
   try {
     const user: user = {
-      name: req.body.name,
-      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       password: req.body.password
     }
     try {
@@ -79,12 +79,12 @@ const destroy = async (req: Request, res: Response) => {
 const authenticate = async (req : Request, res : Response) => {
   try {
     const user : user = {
-      name: req.body.name,
-      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       password: req.body.password
     }
 
-    const newUser = await store.authenticate(req.params.name, user.password)
+    const newUser = await store.authenticate(req.params.firstname, user.password)
     const token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as string)
     res.json(token)
   } catch (err) {
@@ -99,7 +99,7 @@ const userRoutes = (app: express.Application) => {
   app.post('/users', logger, create)
   app.put('/users/:id', [logger], update)
   app.delete('/users/:id', [logger, verifyAuthToken], destroy)
-  app.post('/users/authenticate/:name', logger, authenticate)
+  app.post('/users/authenticate/:name', [logger, verifyAuthToken], authenticate)
 }
 
 export default userRoutes

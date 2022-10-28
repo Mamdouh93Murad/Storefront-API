@@ -2,14 +2,14 @@
     "dev": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "sightings",
+      "database": "store",
       "user": "postgres",
       "password": "meow"
     },
     "test": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "sightings_test",
+      "database": "store_test",
       "user": "postgres",
       "password": "meow"
     }

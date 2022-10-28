@@ -1,11 +1,10 @@
 /* eslint-disable new-cap */
 import express, { NextFunction, Request, Response } from 'express'
-import { category, categoryStore } from '../models/categories'
+import { order, ordersStore } from '../models/orders'
 import logger from '../utilities/logger'
 import jwt from 'jsonwebtoken'
-const store = new categoryStore()
 // @ts-ignore
-const verifyAuthToken = (req: Request, res: Response, next :NextFunction) => {
+const verifyAuthToken = (req: Request, res: Response, next : NextFunction) => {
   try {
     const authorizationHeader = req.headers.authorization as string
     const token = authorizationHeader.split(' ')[1]
@@ -18,23 +17,27 @@ const verifyAuthToken = (req: Request, res: Response, next :NextFunction) => {
   }
 }
 
+const store = new ordersStore()
+
 const index = async (_req: Request, res: Response) => {
-  const category = await store.index()
-  res.json(category)
+  const order = await store.index()
+  res.json(order)
 }
 
 const show = async (req: Request, res: Response) => {
-  const category = await store.show(Number(req.params.id))
-  res.json(category)
+  const order = await store.show(Number(req.params.id))
+  res.json(order)
 }
 
 const create = async (req: Request, res: Response) => {
   try {
-    const category: category = {
-      name: req.body.name
+    const order : order = {
+      id: req.body.id,
+      status: req.body.status,
+      user_id: req.body.user_id
     }
-    const newCategory = await store.create(category)
-    res.json(newCategory)
+    const newOrder = await store.create(order)
+    res.json(newOrder)
   } catch (err) {
     res.status(400)
     res.json(err)
@@ -43,11 +46,12 @@ const create = async (req: Request, res: Response) => {
 
 const update = async (req : Request, res : Response) => {
   try {
-    const category : category = {
-      name: req.body.name
+    const order : order = {
+      status: req.body.status,
+      user_id: req.body.user_id
     }
-    const newCategory = await store.update(Number(req.params.id), category)
-    res.json(newCategory)
+    const newOrder = await store.update(Number(req.params.id), order)
+    res.json(newOrder)
   } catch (err) {
     res.status(400)
     res.json(err)
@@ -56,16 +60,15 @@ const update = async (req : Request, res : Response) => {
 
 const destroy = async (req: Request, res: Response) => {
   const deleted = await store.delete(Number(req.params.id))
-
   res.json(deleted)
 }
 
-const categoryRoutes = (app: express.Application) => {
-  app.get('/categories', logger, index)
-  app.get('/categories/:id', logger, show)
-  app.post('/categories', [logger, verifyAuthToken], create)
-  app.put('/categories/:id', [logger, verifyAuthToken], update)
-  app.delete('/categories/:id', [logger, verifyAuthToken], destroy)
+const orderRoutes = (app: express.Application) => {
+  app.get('/orders', logger, index)
+  app.get('/orders/:id', logger, show)
+  app.post('/orders', [logger, verifyAuthToken], create)
+  app.put('/orders/:id', [logger, verifyAuthToken], update)
+  app.delete('/orders/:id', [logger, verifyAuthToken], destroy)
 }
 
-export default categoryRoutes
+export default orderRoutes

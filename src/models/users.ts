@@ -3,8 +3,8 @@ import client from '../database'
 import bcrypt from 'bcrypt'
 export interface user {
   id?: number
-  name: string
-  email: string,
+  firstname: string
+  lastname: string,
   password : string
 }
 
@@ -43,14 +43,14 @@ export class usersStore {
     try {
       // @ts-ignore
       const conn = await client.connect()
-      const sql = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *'
+      const sql = 'INSERT INTO users (firstname, lastname, password) VALUES ($1, $2, $3) RETURNING *'
 
       const hash = bcrypt.hashSync(
         u.password + BCRYPT_PASSWORD,
         Number(SALT_ROUNDS)
       )
 
-      const result = await conn.query(sql, [u.name, u.email, hash])
+      const result = await conn.query(sql, [u.firstname, u.lastname, hash])
       conn.release()
       return result.rows[0]
     } catch (err) {
@@ -63,14 +63,14 @@ export class usersStore {
       // @ts-ignore
       const conn = await client.connect()
       const sql =
-        'UPDATE users SET (name, email, password) = ($2, $3, $4) WHERE id=($1) RETURNING *'
+        'UPDATE users SET (firstname, lastname, password) = ($2, $3, $4) WHERE id=($1) RETURNING *'
 
       const hash = bcrypt.hashSync(
         u.password + BCRYPT_PASSWORD,
         Number(SALT_ROUNDS)
       )
 
-      const result = await conn.query(sql, [id, u.name, u.email, hash])
+      const result = await conn.query(sql, [id, u.firstname, u.lastname, hash])
       conn.release()
       return result.rows[0]
     } catch (err) {
@@ -94,7 +94,7 @@ export class usersStore {
   async authenticate (username: string, password: string): Promise<user | null> {
     // @ts-ignore
     const conn = await client.connect()
-    const sql = 'SELECT password FROM users WHERE name=($1)'
+    const sql = 'SELECT password FROM users WHERE firstname=($1)'
 
     const result = await conn.query(sql, [username])
 
@@ -106,7 +106,7 @@ export class usersStore {
       console.log(user)
 
       if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password)) {
-        const sql = 'SELECT id, name, email FROM users where name=($1)'
+        const sql = 'SELECT id, firstname, lastname FROM users where firstname=($1)'
         const newUser = await conn.query(sql, [username])
         return newUser.rows[0]
       }

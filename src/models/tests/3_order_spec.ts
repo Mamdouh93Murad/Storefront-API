@@ -2,11 +2,11 @@
 /* eslint-disable new-cap */
 /* eslint-disable jasmine/expect-matcher */
 // eslint-disable-next-line no-unused-vars
-import { region, regionsStore } from '../regions'
+import { order, ordersStore } from '../orders'
 
-const store = new regionsStore()
+const store = new ordersStore()
 
-describe('Region Model', () => {
+describe('Order Model', () => {
   it('should have index method', () => {
     expect(store.index).toBeDefined
   })
@@ -27,18 +27,20 @@ describe('Region Model', () => {
     expect(store.delete).toBeDefined
   })
 
-  it('Should Create new Region', async () => {
-    const result = await store.create({
-      name: 'Africa'
-    })
-    // eslint-disable-next-line no-unused-vars
-    const result2 = await store.create({
-      name: 'Europe'
-    })
+  it('Should Create new order', async () => {
+    const result = await store.create(
+      {
+        id: 1,
+        status: 'complete',
+        user_id: 1
+      }
+    )
+    console.log(result)
 
     expect(result).toEqual({
       id: 1,
-      name: 'Africa'
+      status: 'complete',
+      user_id: 1
     })
   })
 
@@ -48,11 +50,8 @@ describe('Region Model', () => {
     expect(result).toEqual([
       {
         id: 1,
-        name: 'Africa'
-      },
-      {
-        id: 2,
-        name: 'Europe'
+        status: 'complete',
+        user_id: 1
       }
     ])
   })
@@ -62,16 +61,22 @@ describe('Region Model', () => {
 
     expect(result).toEqual({
       id: 1,
-      name: 'Africa'
+      status: 'complete',
+      user_id: 1
     })
   })
 
   it('Should update Entry', async () => {
-    const result = await store.update(1, { name: 'Asia' })
+    const result = await store.update(1, {
+      id: 1,
+      status: 'active',
+      user_id: 1
+    })
 
     expect(result).toEqual({
       id: 1,
-      name: 'Asia'
+      status: 'active',
+      user_id: 1
     })
   })
 
@@ -79,11 +84,6 @@ describe('Region Model', () => {
     await store.delete(1)
     const result = await store.index()
 
-    expect(result).toEqual([
-      {
-        id: 2,
-        name: 'Europe'
-      }
-    ])
+    expect(result).toEqual([])
   })
 })
