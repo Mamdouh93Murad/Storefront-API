@@ -32,7 +32,7 @@ const show = async (req: Request, res: Response) => {
 const update = async (req : Request, res : Response) => {
   try {
     const product : addedProduct = {
-      quantity: req.body.status,
+      quantity: req.body.quantity,
       order_id: req.body.order_id,
       product_id: req.body.product_id
 
