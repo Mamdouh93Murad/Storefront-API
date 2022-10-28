@@ -90,15 +90,15 @@ describe('Product Model', () => {
   })
 
   it('Should Delete Entry', async () => {
-    await store.delete(1)
+    await store.delete(2)
     const result = await store.index()
 
     expect(result).toEqual([
       {
-        id: 2,
-        name: 'TV',
-        price: 50,
-        category: 'electronic'
+        id: 1,
+        name: 'Pen',
+        price: 1,
+        category: 'office'
       }
     ])
   })

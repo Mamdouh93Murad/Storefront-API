@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import userRoutes from './handlers/user'
 import productRoutes from './handlers/product'
 import orderRoutes from './handlers/order'
+import orderProductsRoutes from './handlers/orders_products'
 
 const app: express.Application = express()
 const address: string = '0.0.0.0:3000'
@@ -23,6 +24,7 @@ app.get('/', function (req : express.Request, res : express.Response) {
 productRoutes(app)
 userRoutes(app)
 orderRoutes(app)
+orderProductsRoutes(app)
 
 app.listen(3000, function () {
   console.log(`starting app on: ${address}`)

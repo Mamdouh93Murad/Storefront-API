@@ -28,17 +28,24 @@ describe('Order Model', () => {
   })
 
   it('Should Create new order', async () => {
+    // eslint-disable-next-line no-unused-vars
     const result = await store.create(
       {
         id: 1,
+        status: 'active',
+        user_id: 1
+      }
+    )
+    const result2 = await store.create(
+      {
+        id: 2,
         status: 'complete',
         user_id: 1
       }
     )
-    console.log(result)
 
-    expect(result).toEqual({
-      id: 1,
+    expect(result2).toEqual({
+      id: 2,
       status: 'complete',
       user_id: 1
     })
@@ -50,6 +57,11 @@ describe('Order Model', () => {
     expect(result).toEqual([
       {
         id: 1,
+        status: 'active',
+        user_id: 1
+      },
+      {
+        id: 2,
         status: 'complete',
         user_id: 1
       }
@@ -61,29 +73,33 @@ describe('Order Model', () => {
 
     expect(result).toEqual({
       id: 1,
-      status: 'complete',
+      status: 'active',
       user_id: 1
     })
   })
 
   it('Should update Entry', async () => {
-    const result = await store.update(1, {
-      id: 1,
+    const result = await store.update(2, {
+      id: 2,
       status: 'active',
       user_id: 1
     })
 
     expect(result).toEqual({
-      id: 1,
+      id: 2,
       status: 'active',
       user_id: 1
     })
   })
 
   it('Should Delete Entry', async () => {
-    await store.delete(1)
+    await store.delete(2)
     const result = await store.index()
 
-    expect(result).toEqual([])
+    expect(result).toEqual([{
+      id: 1,
+      status: 'active',
+      user_id: 1
+    }])
   })
 })

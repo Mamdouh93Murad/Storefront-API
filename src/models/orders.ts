@@ -64,7 +64,7 @@ export class ordersStore {
       const sql =
         'UPDATE orders SET (status, user_id) = ($2, (SELECT id FROM users WHERE id=($3))) WHERE id=($1) RETURNING *'
       const result = await conn.query(sql, [
-        order.id,
+        id,
         order.status,
         order.user_id
 
@@ -80,6 +80,7 @@ export class ordersStore {
     try {
       // @ts-ignore
       const conn = await client.connect()
+      await conn.query('DELETE FROM orders_products WHERE id=($1)', [id])
       const sql = 'DELETE FROM orders WHERE id=($1)'
       const result = await conn.query(sql, [id])
       conn.release()

@@ -92,8 +92,8 @@ const authenticate = async (req, res) => {
     }
 };
 const userRoutes = (app) => {
-    app.get('/users', logger_1.default, index);
-    app.get('/users/:id', logger_1.default, show);
+    app.get('/users', [logger_1.default, verifyAuthToken], index);
+    app.get('/users/:id', [logger_1.default, verifyAuthToken], show);
     app.post('/users', logger_1.default, create);
     app.put('/users/:id', [logger_1.default], update);
     app.delete('/users/:id', [logger_1.default, verifyAuthToken], destroy);
