@@ -1,54 +1,155 @@
-# Storefront Backend Project
 
-## Getting Started
+# API Store Web-App
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+<h2  align="center">StoreFront Project - Back-End Node and PostgresSQL App</h2>
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+<p  align="center">
 
-## Steps to Completion
+<a  href="https://www.linkedin.com/in/mamdouh-morad/">
 
-### 1. Plan to Meet Requirements
+<img  alt="Follow Me on LinkedIn"  src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+</a>
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+  
+An API for an online Store to sell products using
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+The Application has been built using **Node.JS**, **TypeScript** and **PostgresSQL** to manage endpoints and database.
 
-### 2.  DB Creation and Migrations
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+## Basic Info
 
-### 3. Models
+* use ``npm install`` in root folder to install the project dependencies and modules
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+* use ``npm run build`` to build the JS files
 
-### 4. Express Handlers
+* use ``npm run test`` to run Jasmine Test Suites
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+* use ``npm run start`` to get the project working and starting on ``localhost:3000``
 
-### 5. JWTs
+* use ``npm run clean`` to clean up and delete the build files.
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+  
 
-### 6. QA and `README.md`
+## Application Data
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+  
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+The Database schema are being stored and read from json files in the ``src`` Folder.
+
+*  **Migration Configuration** are stored in the ``database.json`` file.
+
+*  **Schema** can be found in details under the migration folder in the up/down files in ``migrations`` folder.
+
+  
+  
+
+The Data Interfaces and Objects Structures are located in the ``src/models`` Folder.
+
+* The **Product** Data interface is located in the ``products.ts``file.
+
+* The **User** Interface is located in the ``users.ts`` file.
+
+* The **Orders** Interface is located in the ``orders.ts`` file.
+
+* The **Orders Products** Interface is located in the ``orders_products.ts`` file.
+
+  
+
+## Project Structure
+
+The Application is built using set of **Models** and **Handlers** which handle the flow of data and UI-design.
+
+The **Models and Handlers** are set into 4 different modules.
+
+*  **Products** Module which handles Products CRUD Functions by being used in Handlers/Routers.
+
+*  **Users** Module which handles Users CRUD Functions by being used in Handlers/Routers.
+
+*  **Orders** Module which handles Orders CRUD Functions by being used in Handlers/Routers.
+
+*  **Orders Products** Module which handles Orders-Products CRUD Functions by being used in Handlers/Routers.
+  
+
+The **Test Units** are made up of four modules.
+
+*  **Products** Module which handles Products CRUD Functions.
+
+*  **Users** Module which handles Users CRUD Functions.
+
+*  **Orders** Module which handles Orders CRUD Functions.
+
+*  **Orders Products** Module which handles Orders-Products CRUD Functions.
+
+
+## Interface Properities and Functions
+
+A table containing the properities and functions of each application data-object and Interface used in the website.
+
+|                |Products                             | Users       |
+|----------------|-------------------------------------|-------------------------------------|
+|Elements        |`'ID, Name, Price, Category`         |`Firstname, Lastname, Password`      |
+|Functions       |`Index, Show, Create, Update, Delete`|`Index, Show, Create, Update, Delete`|
+|End Points     | ` /products`                        |`/users`                   |
+
+|                |Orders                               | Orders Products                     |
+|----------------|-------------------------------------|-------------------------------------|
+|Elements        |`'ID, status, Order ID`              |`Quantity, Order ID, Product ID`     |
+|Functions       |`Index, Show, Create, Update, Delete`|`Index, Show, Create, Update, Delete`|
+|End Points      | `/orders`                           | `/orders/:id/products`
+
+  
+
+## UML diagram
+
+The Flow of User Experience and Interaction in the website.
+
+  
+
+```mermaid
+
+graph LR
+
+A[Create User]
+
+A -->C
+
+B[User Existing User]--> C{HomePage}
+C --> D[Index]
+C --> E[Show]
+C --> F[Create]
+C --> G[Update]
+C --> H[Delete]
+
+ K[Products]
+ L[Users]
+ M[Orders]
+ N[Orders Products]
+
+
+D --> K
+D --> L
+D --> M
+D --> N
+
+E --> K
+E --> L
+E --> M
+E --> N
+
+F --> K
+F --> L
+F --> M
+F --> N
+
+G --> K
+G --> L
+G --> M
+G --> N
+
+H --> K
+H --> L
+H --> M
+H --> N
