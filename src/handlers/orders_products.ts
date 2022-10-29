@@ -20,13 +20,23 @@ const verifyAuthToken = (req: Request, res: Response, next : NextFunction) => {
 const store = new ordersProductsStore()
 
 const index = async (_req: Request, res: Response) => {
-  const order = await store.index()
-  res.json(order)
+  try {
+    const order = await store.index()
+    res.json(order)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-  const order = await store.showProduct(Number(req.params.id))
-  res.json(order)
+  try {
+    const order = await store.showProduct(Number(req.params.id))
+    res.json(order)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const update = async (req : Request, res : Response) => {
@@ -46,18 +56,24 @@ const update = async (req : Request, res : Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-  const deleted = await store.deleteProduct(Number(req.params.id))
-  res.json(deleted)
+  try {
+    const deleted = await store.deleteProduct(Number(req.params.id))
+    res.json(deleted)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const addProducts = async (req : Request, res : Response) => {
-  const product : addedProduct = {
-    quantity: req.body.quantity,
-    order_id: req.body.order_id,
-    product_id: req.body.product_id
-
-  }
   try {
+    const product : addedProduct = {
+      quantity: req.body.quantity,
+      order_id: req.body.order_id,
+      product_id: req.body.product_id
+
+    }
+
     const products = await store.addProduct(Number(product.quantity), Number(product.order_id), Number(product.product_id))
     res.json(products)
   } catch (err) {
@@ -67,7 +83,7 @@ const addProducts = async (req : Request, res : Response) => {
 }
 
 const orderProductsRoutes = (app: express.Application) => {
-  app.get('/orders/products', logger, index)
+  app.get('/orders/products', [logger, verifyAuthToken], index)
   app.get('/orders/:id/products', [logger, verifyAuthToken], show)
   app.put('/orders/:id/products', [logger, verifyAuthToken], update)
   app.delete('/orders/:id/products', [logger, verifyAuthToken], destroy)

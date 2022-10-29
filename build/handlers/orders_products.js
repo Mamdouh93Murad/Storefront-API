@@ -21,17 +21,29 @@ const verifyAuthToken = (req, res, next) => {
 };
 const store = new orders_products_1.ordersProductsStore();
 const index = async (_req, res) => {
-    const order = await store.index();
-    res.json(order);
+    try {
+        const order = await store.index();
+        res.json(order);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const show = async (req, res) => {
-    const order = await store.showProduct(Number(req.params.id));
-    res.json(order);
+    try {
+        const order = await store.showProduct(Number(req.params.id));
+        res.json(order);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const update = async (req, res) => {
     try {
         const product = {
-            quantity: req.body.status,
+            quantity: req.body.quantity,
             order_id: req.body.order_id,
             product_id: req.body.product_id
         };
@@ -44,16 +56,22 @@ const update = async (req, res) => {
     }
 };
 const destroy = async (req, res) => {
-    const deleted = await store.deleteProduct(Number(req.params.id));
-    res.json(deleted);
+    try {
+        const deleted = await store.deleteProduct(Number(req.params.id));
+        res.json(deleted);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const addProducts = async (req, res) => {
-    const product = {
-        quantity: req.body.quantity,
-        order_id: req.body.order_id,
-        product_id: req.body.product_id
-    };
     try {
+        const product = {
+            quantity: req.body.quantity,
+            order_id: req.body.order_id,
+            product_id: req.body.product_id
+        };
         const products = await store.addProduct(Number(product.quantity), Number(product.order_id), Number(product.product_id));
         res.json(products);
     }
@@ -62,11 +80,11 @@ const addProducts = async (req, res) => {
         res.json(err);
     }
 };
-const orderRoutes = (app) => {
-    app.get('/orders/products', logger_1.default, index);
+const orderProductsRoutes = (app) => {
+    app.get('/orders/products', [logger_1.default, verifyAuthToken], index);
     app.get('/orders/:id/products', [logger_1.default, verifyAuthToken], show);
     app.put('/orders/:id/products', [logger_1.default, verifyAuthToken], update);
     app.delete('/orders/:id/products', [logger_1.default, verifyAuthToken], destroy);
     app.post('/orders/:id/products', [logger_1.default, verifyAuthToken], addProducts);
 };
-exports.default = orderRoutes;
+exports.default = orderProductsRoutes;

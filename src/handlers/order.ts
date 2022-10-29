@@ -20,13 +20,23 @@ const verifyAuthToken = (req: Request, res: Response, next : NextFunction) => {
 const store = new ordersStore()
 
 const index = async (_req: Request, res: Response) => {
-  const order = await store.index()
-  res.json(order)
+  try {
+    const order = await store.index()
+    res.json(order)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-  const order = await store.show(Number(req.params.id))
-  res.json(order)
+  try {
+    const order = await store.show(Number(req.params.id))
+    res.json(order)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const create = async (req: Request, res: Response) => {
@@ -59,13 +69,18 @@ const update = async (req : Request, res : Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-  const deleted = await store.delete(Number(req.params.id))
-  res.json(deleted)
+  try {
+    const deleted = await store.delete(Number(req.params.id))
+    res.json(deleted)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const orderRoutes = (app: express.Application) => {
-  app.get('/orders', logger, index)
-  app.get('/orders/:id', logger, show)
+  app.get('/orders', [logger, verifyAuthToken], index)
+  app.get('/orders/:id', [logger, verifyAuthToken], show)
   app.post('/orders', [logger, verifyAuthToken], create)
   app.put('/orders/:id', [logger, verifyAuthToken], update)
   app.delete('/orders/:id', [logger, verifyAuthToken], destroy)

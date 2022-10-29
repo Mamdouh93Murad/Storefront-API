@@ -7,7 +7,7 @@ import orderRoutes from './handlers/order'
 import orderProductsRoutes from './handlers/orders_products'
 
 const app: express.Application = express()
-const address: string = '0.0.0.0:3000'
+const address: string = '0.0.0.0:' + process.env.PORT
 
 const corsOptions = {
   // origin: 'http://example.com',
@@ -26,6 +26,6 @@ userRoutes(app)
 orderRoutes(app)
 orderProductsRoutes(app)
 
-app.listen(3000, function () {
+app.listen(process.env.PORT, function () {
   console.log(`starting app on: ${address}`)
 })

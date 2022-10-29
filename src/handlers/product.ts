@@ -19,13 +19,23 @@ const verifyAuthToken = (req: Request, res: Response, next :NextFunction) => {
 }
 
 const index = async (_req: Request, res: Response) => {
-  const product = await store.index()
-  res.json(product)
+  try {
+    const product = await store.index()
+    res.json(product)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-  const product = await store.show(Number(req.params.id))
-  res.json(product)
+  try {
+    const product = await store.show(Number(req.params.id))
+    res.json(product)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const create = async (req: Request, res: Response) => {
@@ -59,13 +69,18 @@ const update = async (req : Request, res : Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-  const deleted = await store.delete(Number(req.params.id))
-  res.json(deleted)
+  try {
+    const deleted = await store.delete(Number(req.params.id))
+    res.json(deleted)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const productRoutes = (app: express.Application) => {
-  app.get('/products', logger, index)
-  app.get('/products/:id', logger, show)
+  app.get('/products', [logger, verifyAuthToken], index)
+  app.get('/products/:id', [logger, verifyAuthToken], show)
   app.post('/products', [logger, verifyAuthToken], create)
   app.put('/products/:id', [logger, verifyAuthToken], update)
   app.delete('/products/:id', [logger, verifyAuthToken], destroy)

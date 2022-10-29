@@ -32,10 +32,62 @@ The Application has been built using **Node.JS**, **TypeScript** and **PostgresS
 * use ``npm run clean`` to clean up and delete the build files.
 
   
+## DataBase Info
+
+* username ``postgres``.
+* password ``meow``.
+* Dev-Database name store.
+* Test-Database name store_test.
+ {
+    "dev": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "store",
+      "user": "postgres",
+      "password": "meow"
+    },
+    "test": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "store_test",
+      "user": "postgres",
+      "password": "meow"
+    }
+  }
+
+
+## DATABASE Instructions to get it Ready  - Be Noted That Test-Database already gets created automatically with running Jasmine-Unit-Testing
+
+*  CREATE USER postgres WITH PASSWORD 'meow';                    // Creates User with given name & password
+*  CREATE DATABASE store;                                       // Creates Database
+*  CREATE DATABASE store_test;                                 // Creates Database
+*  \c store                                                   // Connects to Database
+*  GRANT ALL PRIVILEGES ON DATABASE store TO postgres;       // Give Permissions to user
+* \c store_test                                             // Connects to Database
+* GRANT ALL PRIVILEGES ON DATABASE store_test TO postgres; // Give Permissions to user
+
+
+
+## Database Schema
+* ``products`` CREATE TABLE products (id SERIAL PRIMARY KEY, name VARCHAR, price INTEGER, category VARCHAR);
+* ``users`` CREATE TABLE users (id SERIAL PRIMARY KEY, firstname VARCHAR, lastname VARCHAR, password VARCHAR);
+* ``orders`` CREATE TABLE orders (id SERIAL PRIMARY KEY, status VARCHAR, user_id INTEGER REFERENCES users(id));
+* ``orders_products``  CREATE TABLE orders_products (id SERIAL PRIMARY KEY, quantity INTEGER, order_id INTEGER REFERENCES orders(id), product_id INTEGER REFERENCES products(id));
+
+## ENV File
+*  ``TEST_VAR`` = ``testing123``
+*  ``POSTGRES_HOST`` = ``127.0.0.1``
+*  `POSTGRES_DB` = ``store``
+*  ``POSTGRES_USER`` = ``postgres``
+*  ``POSTGRES_PASSWORD`` = ``meow``
+*  ``POSTGRES_DB_TEST`` = ``store_test``
+*  ``BCRYPT_PASSWORD`` = ``Sanji12Sherry12!``
+*  ``SALT_ROUNDS`` = ``10``
+*  ``TOKEN_SECRET`` = ``meow12meow12``
+*  ``ENV`` = ``dev``
+
 
 ## Application Data
-
-  
 
 The Database schema are being stored and read from json files in the ``src`` Folder.
 
@@ -43,7 +95,7 @@ The Database schema are being stored and read from json files in the ``src`` Fol
 
 *  **Schema** can be found in details under the migration folder in the up/down files in ``migrations`` folder.
 
-  
+* To run all **Migration** files  ``db-migrate up:all`` or ``db-migrate down:all``
   
 
 The Data Interfaces and Objects Structures are located in the ``src/models`` Folder.
@@ -88,17 +140,27 @@ The **Test Units** are made up of four modules.
 
 A table containing the properities and functions of each application data-object and Interface used in the website.
 
-|                |Products                             | Users       |
+|                |Products                             | Users                               | 
 |----------------|-------------------------------------|-------------------------------------|
 |Elements        |`'ID, Name, Price, Category`         |`Firstname, Lastname, Password`      |
 |Functions       |`Index, Show, Create, Update, Delete`|`Index, Show, Create, Update, Delete`|
-|End Points     | ` /products`                        |`/users`                   |
+|End Points     | ` /products`                         |`/users`                             |
 
 |                |Orders                               | Orders Products                     |
 |----------------|-------------------------------------|-------------------------------------|
 |Elements        |`'ID, status, Order ID`              |`Quantity, Order ID, Product ID`     |
 |Functions       |`Index, Show, Create, Update, Delete`|`Index, Show, Create, Update, Delete`|
-|End Points      | `/orders`                           | `/orders/:id/products`
+|End Points      | `/orders`                           | `/orders/:id/products`              |
+
+
+
+
+|                |        ``INDEX  - GET ``            |     ``SHOW   - GET``       |  ``CREATE - POST``      |  `` UPDATE - PUT ``       |   ``DELETE - DELETE``     |
+|----------------|-------------------------------------|----------------------------|-------------------------|---------------------------|---------------------------|
+|                |      ``/products ``                 |   ``/products/:id ``       |   ``/products``         |  ``/products/:id ``       |  ``/products/:id ``       |
+|                |      ``/users ``                    |   ``/users/:id``           |   ``/users``            |  ``/users/:id``           |  ``/users/:id``           |
+|                |      ``/orders ``                   |   ``/orders/:id``          |   ``/orders ``          |  ``/orders/:id``          |  ``/orders/:id``          |
+|                |      ``/orders/:id/products``       | ``/orders/:id/products ``  | ``/orders/:id/products``|  ``/orders/:id/products`` |  ``/orders/:id/products`` |
 
   
 

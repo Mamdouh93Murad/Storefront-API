@@ -20,12 +20,24 @@ const verifyAuthToken = (req, res, next) => {
     }
 };
 const index = async (_req, res) => {
-    const user = await store.index();
-    res.json(user);
+    try {
+        const user = await store.index();
+        res.json(user);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const show = async (req, res) => {
-    const user = await store.show(Number(req.params.id));
-    res.json(user);
+    try {
+        const user = await store.show(Number(req.params.id));
+        res.json(user);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const create = async (req, res) => {
     try {
@@ -72,8 +84,14 @@ const update = async (req, res) => {
     }
 };
 const destroy = async (req, res) => {
-    const deleted = await store.delete(Number(req.params.id));
-    res.json(deleted);
+    try {
+        const deleted = await store.delete(Number(req.params.id));
+        res.json(deleted);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const authenticate = async (req, res) => {
     try {

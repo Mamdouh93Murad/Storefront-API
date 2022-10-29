@@ -9,8 +9,9 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const user_1 = __importDefault(require("./handlers/user"));
 const product_1 = __importDefault(require("./handlers/product"));
 const order_1 = __importDefault(require("./handlers/order"));
+const orders_products_1 = __importDefault(require("./handlers/orders_products"));
 const app = (0, express_1.default)();
-const address = '0.0.0.0:3000';
+const address = '0.0.0.0:' + process.env.PORT;
 const corsOptions = {
     // origin: 'http://example.com',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -23,6 +24,7 @@ app.get('/', function (req, res) {
 (0, product_1.default)(app);
 (0, user_1.default)(app);
 (0, order_1.default)(app);
-app.listen(3000, function () {
+(0, orders_products_1.default)(app);
+app.listen(process.env.PORT, function () {
     console.log(`starting app on: ${address}`);
 });
