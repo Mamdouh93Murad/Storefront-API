@@ -79,8 +79,8 @@ const destroy = async (req: Request, res: Response) => {
 }
 
 const productRoutes = (app: express.Application) => {
-  app.get('/products', [logger, verifyAuthToken], index)
-  app.get('/products/:id', [logger, verifyAuthToken], show)
+  app.get('/products', [logger], index)
+  app.get('/products/:id', [logger], show)
   app.post('/products', [logger, verifyAuthToken], create)
   app.put('/products/:id', [logger, verifyAuthToken], update)
   app.delete('/products/:id', [logger, verifyAuthToken], destroy)
