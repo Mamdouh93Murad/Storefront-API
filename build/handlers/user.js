@@ -113,7 +113,7 @@ const userRoutes = (app) => {
     app.get('/users', [logger_1.default, verifyAuthToken], index);
     app.get('/users/:id', [logger_1.default, verifyAuthToken], show);
     app.post('/users', logger_1.default, create);
-    app.put('/users/:id', [logger_1.default], update);
+    app.put('/users/:id', [logger_1.default, verifyAuthToken], update);
     app.delete('/users/:id', [logger_1.default, verifyAuthToken], destroy);
     app.post('/users/authenticate/:name', [logger_1.default, verifyAuthToken], authenticate);
 };

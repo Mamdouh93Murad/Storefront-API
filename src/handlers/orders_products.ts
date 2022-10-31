@@ -71,7 +71,6 @@ const addProducts = async (req : Request, res : Response) => {
       quantity: req.body.quantity,
       order_id: req.body.order_id,
       product_id: req.body.product_id
-
     }
 
     const products = await store.addProduct(Number(product.quantity), Number(product.order_id), Number(product.product_id))

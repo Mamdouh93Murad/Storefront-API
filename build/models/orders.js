@@ -38,10 +38,8 @@ class ordersStore {
         try {
             // @ts-ignore
             const conn = await database_1.default.connect();
-            // const sql = 'INSERT INTO sightings (name, description, number, user_id, region_id) VALUES ($1, $2, $3, (SELECT id FROM users WHERE name=$(4)), (SELECT id FROM regions WHERE name=($5)), (SELECT id FROM categories WHERE name=($6)))'
-            const sql = 'INSERT INTO orders (id, status, user_id) VALUES ($1, $2, (SELECT id FROM users WHERE id=($3))) RETURNING *';
+            const sql = 'INSERT INTO orders (status, user_id) VALUES ($1, (SELECT id FROM users WHERE id=($2))) RETURNING *';
             const result = await conn.query(sql, [
-                order.id,
                 order.status,
                 order.user_id
             ]);

@@ -43,7 +43,6 @@ const show = async (req, res) => {
 const create = async (req, res) => {
     try {
         const order = {
-            id: req.body.id,
             status: req.body.status,
             user_id: req.body.user_id
         };

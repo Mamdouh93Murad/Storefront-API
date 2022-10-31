@@ -28,3 +28,4 @@ app.get('/', function (req, res) {
 app.listen(process.env.PORT, function () {
     console.log(`starting app on: ${address}`);
 });
+exports.default = app;

@@ -81,8 +81,8 @@ const destroy = async (req, res) => {
     }
 };
 const productRoutes = (app) => {
-    app.get('/products', [logger_1.default, verifyAuthToken], index);
-    app.get('/products/:id', [logger_1.default, verifyAuthToken], show);
+    app.get('/products', [logger_1.default], index);
+    app.get('/products/:id', [logger_1.default], show);
     app.post('/products', [logger_1.default, verifyAuthToken], create);
     app.put('/products/:id', [logger_1.default, verifyAuthToken], update);
     app.delete('/products/:id', [logger_1.default, verifyAuthToken], destroy);
