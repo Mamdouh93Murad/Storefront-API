@@ -25,7 +25,7 @@ describe('Order Product Router Test Suite', () => {
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .send(a)
-    console.log(result.body)
+
     expect(result.status).toBe(200)
   })
 
