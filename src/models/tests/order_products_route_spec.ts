@@ -2,6 +2,7 @@ import supertest from 'supertest'
 import app from '../../server'
 import jwt from 'jsonwebtoken'
 import { user } from '../users'
+import { addedProduct } from '../orders_products'
 
 const request = supertest(app)
 
@@ -10,69 +11,76 @@ const u : user = {
   lastname: 'Morad',
   password: 'meow'
 }
+const a : addedProduct = {
+  quantity: 5,
+  order_id: 1,
+  product_id: 1
+}
 const token = jwt.sign(u, process.env.TOKEN_SECRET as string)
 
-describe('User Router Test Suite', () => {
-  it('Should Return a New User', async () => {
+describe('Order Product Router Test Suite', () => {
+  it('Should Return a New Order', async () => {
     const result = await request
-      .post('/users')
+      .post('/orders/1/products')
       .set('Content-Type', 'application/json')
-      .send(u)
+      .set('Authorization', `Bearer ${token}`)
+      .send(a)
 
     expect(result.status).toBe(200)
   })
 
-  it('Should Update an Existing User', async () => {
+  it('Should Update an Order Product ', async () => {
     const result = await request
-      .put('/users/1')
+      .put('/orders/2/products')
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        firstname: 'Sherry',
-        lastname: 'Morad',
-        password: 'meow'
+        quantity: 7,
+        order_id: 1,
+        product_id: 1
       })
 
     expect(result.status).toBe(200)
-    expect(result.body.firstname).toBe('Sherry')
-    expect(result.body.lastname).toBe('Morad')
+    expect(result.body.quantity).toBe(7)
+    expect(result.body.order_id).toBe(1)
+    expect(result.body.product_id).toBe(1)
   })
 
-  it('Should Retrieve an Existing User', async () => {
+  it('Should Retrieve an Existing Order Product', async () => {
     const result = await request
-      .get('/users/1')
+      .get('/orders/2/products')
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
 
     expect(result.status).toBe(200)
-    expect(result.body.firstname).toBe('Sherry')
-    expect(result.body.lastname).toBe('Morad')
+    expect(result.body.quantity).toBe(7)
+    expect(result.body.order_id).toBe(1)
+    expect(result.body.product_id).toBe(1)
   })
 
-  it('Should Retrieve All Existing User', async () => {
+  it('Should Retrieve All Existing Order Product', async () => {
     const result = await request
-      .get('/users')
+      .get('/orders/2/products')
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
 
-    expect(result.status).toBe(200)
-    expect(result.body[1].firstname).toBe('Sherry')
-    expect(result.body[1].lastname).toBe('Morad')
-    expect(result.body.length).toBe(2)
+    expect(result.body.quantity).toBe(7)
+    expect(result.body.order_id).toBe(1)
+    expect(result.body.product_id).toBe(1)
   })
 
-  it('Should Delete An Existing User', async () => {
+  it('Should Delete An Existing Order Product', async () => {
     const res = await request
-      .delete('/users/3')
+      .delete('/orders/2/products')
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
 
     const result = await request
-      .get('/users')
+      .get('/orders/2/products')
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
 
     expect(result.status).toBe(200)
-    expect(result.body.length).toBe(1)
+    expect(result.body.length).toBe(0)
   })
 })

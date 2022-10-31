@@ -63,9 +63,24 @@ describe('Order Router Test Suite', () => {
       .get('/orders')
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${token}`)
-
+ 
     expect(result.body[1].id).toBe(1)
     expect(result.body[1].status).toBe('active')
     expect(result.body[1].user_id).toBe(1)
+  })
+
+  it('Should Delete An Existing Order', async () => {
+    const res = await request
+      .delete('/orders/3')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+
+    const result = await request
+      .get('/orders')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(result.status).toBe(200)
+    expect(result.body.length).toBe(1)
   })
 })

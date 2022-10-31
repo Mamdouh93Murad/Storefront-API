@@ -61,4 +61,16 @@ describe('Product Router Test Suite', () => {
         expect(result.body[1].price).toBe(50);
         expect(result.body[1].category).toBe('electronics');
     });
+    it('Should Delete An Existing Product', async () => {
+        const res = await request
+            .delete('/products/3')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+        const result = await request
+            .get('/products')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+        expect(result.status).toBe(200);
+        expect(result.body.length).toBe(1);
+    });
 });

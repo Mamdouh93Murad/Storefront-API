@@ -52,5 +52,18 @@ describe('User Router Test Suite', () => {
         expect(result.status).toBe(200);
         expect(result.body[1].firstname).toBe('Sherry');
         expect(result.body[1].lastname).toBe('Morad');
+        expect(result.body.length).toBe(2);
+    });
+    it('Should Delete An Existing User', async () => {
+        const res = await request
+            .delete('/users/3')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+        const result = await request
+            .get('/users')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+        expect(result.status).toBe(200);
+        expect(result.body.length).toBe(1);
     });
 });
