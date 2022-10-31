@@ -31,7 +31,7 @@ const index = async (_req: Request, res: Response) => {
 
 const show = async (req: Request, res: Response) => {
   try {
-    const order = await store.showProduct(Number(req.params.id))
+    const order = await store.showProduct(Number(req.params.pid))
     res.json(order)
   } catch (err) {
     res.status(400)
@@ -47,7 +47,7 @@ const update = async (req : Request, res : Response) => {
       product_id: req.body.product_id
 
     }
-    const newOrder = await store.updateProduct(Number(req.params.id), product)
+    const newOrder = await store.updateProduct(Number(req.params.pid), product)
     res.json(newOrder)
   } catch (err) {
     res.status(400)
@@ -57,7 +57,7 @@ const update = async (req : Request, res : Response) => {
 
 const destroy = async (req: Request, res: Response) => {
   try {
-    const deleted = await store.deleteProduct(Number(req.params.id))
+    const deleted = await store.deleteProduct(Number(req.params.pid))
     res.json(deleted)
   } catch (err) {
     res.status(400)
@@ -82,10 +82,10 @@ const addProducts = async (req : Request, res : Response) => {
 }
 
 const orderProductsRoutes = (app: express.Application) => {
-  app.get('/orders/products', [logger, verifyAuthToken], index)
-  app.get('/orders/:id/products', [logger, verifyAuthToken], show)
-  app.put('/orders/:id/products', [logger, verifyAuthToken], update)
-  app.delete('/orders/:id/products', [logger, verifyAuthToken], destroy)
+  app.get('/orders/:id/products/', [logger, verifyAuthToken], index)
+  app.get('/orders/:id/products/:pid', [logger, verifyAuthToken], show)
+  app.put('/orders/:id/products/:pid', [logger, verifyAuthToken], update)
+  app.delete('/orders/:id/products/:pid', [logger, verifyAuthToken], destroy)
   app.post('/orders/:id/products', [logger, verifyAuthToken], addProducts)
 }
 

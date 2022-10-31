@@ -32,7 +32,7 @@ const index = async (_req, res) => {
 };
 const show = async (req, res) => {
     try {
-        const order = await store.showProduct(Number(req.params.id));
+        const order = await store.showProduct(Number(req.params.pid));
         res.json(order);
     }
     catch (err) {
@@ -47,7 +47,7 @@ const update = async (req, res) => {
             order_id: req.body.order_id,
             product_id: req.body.product_id
         };
-        const newOrder = await store.updateProduct(Number(req.params.id), product);
+        const newOrder = await store.updateProduct(Number(req.params.pid), product);
         res.json(newOrder);
     }
     catch (err) {
@@ -57,7 +57,7 @@ const update = async (req, res) => {
 };
 const destroy = async (req, res) => {
     try {
-        const deleted = await store.deleteProduct(Number(req.params.id));
+        const deleted = await store.deleteProduct(Number(req.params.pid));
         res.json(deleted);
     }
     catch (err) {
@@ -81,10 +81,10 @@ const addProducts = async (req, res) => {
     }
 };
 const orderProductsRoutes = (app) => {
-    app.get('/orders/products', [logger_1.default, verifyAuthToken], index);
-    app.get('/orders/:id/products', [logger_1.default, verifyAuthToken], show);
-    app.put('/orders/:id/products', [logger_1.default, verifyAuthToken], update);
-    app.delete('/orders/:id/products', [logger_1.default, verifyAuthToken], destroy);
+    app.get('/orders/:id/products/', [logger_1.default, verifyAuthToken], index);
+    app.get('/orders/:id/products/:pid', [logger_1.default, verifyAuthToken], show);
+    app.put('/orders/:id/products/:pid', [logger_1.default, verifyAuthToken], update);
+    app.delete('/orders/:id/products/:pid', [logger_1.default, verifyAuthToken], destroy);
     app.post('/orders/:id/products', [logger_1.default, verifyAuthToken], addProducts);
 };
 exports.default = orderProductsRoutes;

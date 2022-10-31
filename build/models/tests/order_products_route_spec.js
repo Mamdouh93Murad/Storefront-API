@@ -19,7 +19,7 @@ const a = {
 };
 const token = jsonwebtoken_1.default.sign(u, process.env.TOKEN_SECRET);
 describe('Order Product Router Test Suite', () => {
-    it('Should Return a New Order', async () => {
+    it('Should Return a New Order Product', async () => {
         const result = await request
             .post('/orders/1/products')
             .set('Content-Type', 'application/json')
@@ -30,7 +30,7 @@ describe('Order Product Router Test Suite', () => {
     });
     it('Should Update an Order Product ', async () => {
         const result = await request
-            .put('/orders/2/products')
+            .put('/orders/1/products/2')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`)
             .send({
@@ -45,7 +45,7 @@ describe('Order Product Router Test Suite', () => {
     });
     it('Should Retrieve an Existing Order Product', async () => {
         const result = await request
-            .get('/orders/2/products')
+            .get('/orders/1/products/2')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`);
         expect(result.status).toBe(200);
@@ -55,7 +55,7 @@ describe('Order Product Router Test Suite', () => {
     });
     it('Should Retrieve All Existing Order Product', async () => {
         const result = await request
-            .get('/orders/2/products')
+            .get('/orders/1/products/2')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`);
         expect(result.body.quantity).toBe(7);
@@ -64,11 +64,11 @@ describe('Order Product Router Test Suite', () => {
     });
     it('Should Delete An Existing Order Product', async () => {
         const res = await request
-            .delete('/orders/2/products')
+            .delete('/orders/1/products/2')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`);
         const result = await request
-            .get('/orders/2/products')
+            .get('/orders/1/products/2')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`);
         expect(result.status).toBe(200);
