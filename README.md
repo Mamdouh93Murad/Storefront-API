@@ -32,28 +32,7 @@ The Application has been built using **Node.JS**, **TypeScript** and **PostgresS
 * use ``npm run clean`` to clean up and delete the build files.
 
   
-## DataBase Info
 
-* username ``postgres``.
-* password ``meow``.
-* Dev-Database name store.
-* Test-Database name store_test.
- {
-    "dev": {
-      "driver": "pg",
-      "host": "127.0.0.1",
-      "database": "store",
-      "user": "postgres",
-      "password": "meow"
-    },
-    "test": {
-      "driver": "pg",
-      "host": "127.0.0.1",
-      "database": "store_test",
-      "user": "postgres",
-      "password": "meow"
-    }
-  }
 
 
 ## DATABASE Instructions to get it Ready  - Be Noted That Test-Database already gets created automatically with running Jasmine-Unit-Testing
@@ -74,17 +53,6 @@ The Application has been built using **Node.JS**, **TypeScript** and **PostgresS
 * ``orders`` CREATE TABLE orders (id SERIAL PRIMARY KEY, status VARCHAR, user_id INTEGER REFERENCES users(id));
 * ``orders_products``  CREATE TABLE orders_products (id SERIAL PRIMARY KEY, quantity INTEGER, order_id INTEGER REFERENCES orders(id), product_id INTEGER REFERENCES products(id));
 
-## ENV File
-*  ``TEST_VAR`` = ``testing123``
-*  ``POSTGRES_HOST`` = ``127.0.0.1``
-*  `POSTGRES_DB` = ``store``
-*  ``POSTGRES_USER`` = ``postgres``
-*  ``POSTGRES_PASSWORD`` = ``meow``
-*  ``POSTGRES_DB_TEST`` = ``store_test``
-*  ``BCRYPT_PASSWORD`` = ``Sanji12Sherry12!``
-*  ``SALT_ROUNDS`` = ``10``
-*  ``TOKEN_SECRET`` = ``meow12meow12``
-*  ``ENV`` = ``dev``
 
 
 ## Application Data
